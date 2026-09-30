@@ -9,7 +9,14 @@ export const CookiePolicy: React.FC = () => {
     <div id="page-cookie-policy" className="wf">
       <div className="legal-page-hero">
         <div className="legal-hero-video">
-          <video autoPlay loop muted playsInline>
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            poster="/wf/6491ab1c780fa954eb9a3f02_Gradient-poster-00001.jpg"
+          >
             <source src="/wf/6491ab1c780fa954eb9a3f02_Gradient-transcode.mp4" type="video/mp4" />
             <source src="/wf/6491ab1c780fa954eb9a3f02_Gradient-transcode.webm" type="video/webm" />
           </video>

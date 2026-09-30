@@ -69,7 +69,7 @@ export const Navbar: React.FC = () => {
   return (
     <header className={navbarClasses} id="custom-navbar">
       <div className="custom-nav-container">
-        <Link to="/" aria-current="page" className="logo-wrap" style={{ textDecoration: 'none' }}>
+        <Link to="/" aria-current={location.pathname === '/' ? 'page' : undefined} className="logo-wrap" style={{ textDecoration: 'none' }}>
           <div className="custom-logo-text">arcstone.</div>
         </Link>
 
@@ -104,7 +104,12 @@ export const Navbar: React.FC = () => {
                 <div className="ndp-col-header">Capital &amp; Ownership</div>
                 <div className="ndp-col-header">Administration</div>
 
-                <Link className="ndp-item" to="/raise-capital" onClick={() => setSolutionsOpen(false)}>
+                <Link
+                  className="ndp-item"
+                  to="/raise-capital"
+                  aria-current={location.pathname === '/raise-capital' ? 'page' : undefined}
+                  onClick={() => setSolutionsOpen(false)}
+                >
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
                     <svg
                       style={{ flexShrink: 0, marginTop: '1px' }}
@@ -129,7 +134,12 @@ export const Navbar: React.FC = () => {
                   </div>
                 </Link>
 
-                <Link className="ndp-item" to="/administer-investors" onClick={() => setSolutionsOpen(false)}>
+                <Link
+                  className="ndp-item"
+                  to="/administer-investors"
+                  aria-current={location.pathname === '/administer-investors' ? 'page' : undefined}
+                  onClick={() => setSolutionsOpen(false)}
+                >
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
                     <svg
                       style={{ flexShrink: 0, marginTop: '1px' }}
@@ -155,7 +165,12 @@ export const Navbar: React.FC = () => {
                   </div>
                 </Link>
 
-                <Link className="ndp-item" to="/manage-ownership" onClick={() => setSolutionsOpen(false)}>
+                <Link
+                  className="ndp-item"
+                  to="/manage-ownership"
+                  aria-current={location.pathname === '/manage-ownership' ? 'page' : undefined}
+                  onClick={() => setSolutionsOpen(false)}
+                >
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
                     <svg
                       style={{ flexShrink: 0, marginTop: '1px' }}
@@ -180,7 +195,12 @@ export const Navbar: React.FC = () => {
                   </div>
                 </Link>
 
-                <Link className="ndp-item" to="/manage-distributions" onClick={() => setSolutionsOpen(false)}>
+                <Link
+                  className="ndp-item"
+                  to="/manage-distributions"
+                  aria-current={location.pathname === '/manage-distributions' ? 'page' : undefined}
+                  onClick={() => setSolutionsOpen(false)}
+                >
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
                     <svg
                       style={{ flexShrink: 0, marginTop: '1px' }}
@@ -211,6 +231,7 @@ export const Navbar: React.FC = () => {
                   <Link
                     className="ndp-item ndp-span"
                     to="/platform"
+                    aria-current={location.pathname === '/platform' ? 'page' : undefined}
                     onClick={() => setSolutionsOpen(false)}
                     style={{
                       display: 'flex',
@@ -253,7 +274,11 @@ export const Navbar: React.FC = () => {
           </Link>
 
           <div className="custom-nav-actions">
-            <Link to="/waitlist" className="custom-nav-button">
+            <Link
+              to="/waitlist"
+              className="custom-nav-button"
+              aria-current={location.pathname === '/waitlist' ? 'page' : undefined}
+            >
               Book a demo
             </Link>
 
