@@ -73,8 +73,12 @@ export const Navbar: React.FC = () => {
           <div className="custom-logo-text">arcstone.</div>
         </Link>
 
-        <nav className={`custom-nav-menu${mobileMenuOpen ? ' is-open' : ''}`} id="custom-nav-menu">
-          <Link className="custom-nav-link" to="/platform">
+        <nav className={`custom-nav-menu${mobileMenuOpen ? ' is-open' : ''}`} id="custom-nav-menu" aria-label="Main">
+          <Link
+            className="custom-nav-link"
+            to="/platform"
+            aria-current={location.pathname === '/platform' ? 'page' : undefined}
+          >
             Platform
           </Link>
 
@@ -82,6 +86,8 @@ export const Navbar: React.FC = () => {
             <button
               className="nav-drop-btn"
               type="button"
+              aria-expanded={solutionsOpen}
+              aria-haspopup="true"
               onClick={(e) => {
                 e.stopPropagation();
                 setSolutionsOpen((prev) => !prev);
@@ -238,7 +244,11 @@ export const Navbar: React.FC = () => {
             </div>
           </div>
 
-          <Link className="custom-nav-link" to="/about-us">
+          <Link
+            className="custom-nav-link"
+            to="/about-us"
+            aria-current={location.pathname === '/about-us' ? 'page' : undefined}
+          >
             Company
           </Link>
 
@@ -283,7 +293,9 @@ export const Navbar: React.FC = () => {
         <button
           className="custom-mobile-toggle"
           id="custom-mobile-toggle"
-          aria-label="Open menu"
+          aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={mobileMenuOpen}
+          aria-controls="custom-nav-menu"
           type="button"
           onClick={() => setMobileMenuOpen((prev) => !prev)}
         >

@@ -69,7 +69,9 @@ function writeStoredConsent(record: StoredConsent) {
   if (typeof window === 'undefined') return;
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(record));
-  } catch {}
+  } catch {
+    // Ignore storage quota or access errors in private browsing modes
+  }
   const encoded = encodeURIComponent(JSON.stringify(record));
   const maxAge = Math.floor(TTL_MS / 1000);
   const secure = window.location.protocol === 'https:' ? '; Secure' : '';
