@@ -29,5 +29,6 @@ lerna-debug.log*
 *.sln
 *.sw?
 
-# Standalone monolithic bundle archive (preserved locally)
-arcstone-standalone.html
+# Standalone monolithic bundle archive (root copy ignored, reference copy tracked)
+/arcstone-standalone.html
+!/reference/arcstone-standalone.html
