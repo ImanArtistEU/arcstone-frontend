@@ -1,12 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 export const PrivacyPolicy: React.FC = () => {
-  useEffect(() => {
-    document.title = 'Privacy Policy | Arcstone';
-    window.scrollTo(0, 0);
-  }, []);
-
   return (
     <div id="page-privacy-policy" className="wf">
       <div className="legal-page-hero">
@@ -16,43 +11,68 @@ export const PrivacyPolicy: React.FC = () => {
             <source src="/wf/6491ab1c780fa954eb9a3f02_Gradient-transcode.webm" type="video/webm" />
           </video>
         </div>
-        <div className="legal-hero-scrim"></div>
+        <div className="legal-hero-scrim" />
         <div className="legal-hero-inner">
           <div className="legal-eyebrow">Legal</div>
           <h1>Privacy Policy</h1>
           <div className="legal-meta">
-            <span>Last updated: September 2026</span>
+            <span>Coming soon</span>
           </div>
         </div>
       </div>
 
-      <div className="legal-body container w-container" style={{ maxWidth: '800px', margin: '60px auto', padding: '0 20px' }}>
-        <div className="legal-highlight-box" style={{ background: '#f8fafc', borderLeft: '4px solid #4f46e5', padding: '20px 24px', borderRadius: '8px', marginBottom: '40px' }}>
-          <p style={{ margin: 0, color: '#334155', lineHeight: 1.6 }}>
-            Arcstone respects your privacy. This policy outlines how information is handled when you explore our platform, book a demonstration, or request early access.
+      <div className="legal-body">
+        <div className="legal-highlight-box">
+          <p>
+            A full privacy policy is coming soon. The section below explains how we handle the details
+            you share when you book a demo or join our waitlist. For any privacy enquiry, please get in
+            touch.
           </p>
         </div>
 
-        <section style={{ marginBottom: '32px' }}>
-          <h2 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '14px', color: '#0f172a' }}>1. Information We Collect</h2>
-          <p style={{ color: '#475569', lineHeight: 1.7 }}>
-            We collect information provided directly when booking a demo, joining the waitlist, or contacting our team (such as name, corporate email, firm name, and stakeholder counts).
+        <div className="legal-section">
+          <h2>Demo requests &amp; waitlist</h2>
+          <p>
+            When you submit the “Book a demo” form, we collect your first name, last name, work email
+            address, and company name. If you tick the optional box, we also record your consent to
+            receive product updates. For security and abuse prevention we store a one-way hashed
+            (irreversible) version of your IP address and your browser’s user-agent string.
           </p>
-        </section>
+          <p>
+            <strong>Why we use it:</strong> to contact you and schedule your demo, to notify you when
+            the platform launches in September, and—only if you opted in—to send occasional product
+            updates. <strong>Legal basis:</strong> your consent and steps taken at your request prior to
+            entering into a contract.
+          </p>
+          <p>
+            <strong>Who can see it:</strong> the Arcstone team. Your details are stored on our website
+            hosting infrastructure (Easyhost) and transmitted by email through our email provider. We do
+            not sell your data or share it for third-party advertising.
+          </p>
+          <p>
+            <strong>How long we keep it:</strong> we retain demo-request details only as long as needed
+            to contact you about the launch, and we will delete records that do not lead to an ongoing
+            relationship within a reasonable period after launch.
+          </p>
+          <p>
+            <strong>Your choices:</strong> you can withdraw consent or ask us to correct or delete
+            your details at any time by emailing{' '}
+            <a href="mailto:info@arcstone.one">info@arcstone.one</a>. If you opted in to product
+            updates, every marketing email will include an unsubscribe option.
+          </p>
+        </div>
 
-        <section style={{ marginBottom: '32px' }}>
-          <h2 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '14px', color: '#0f172a' }}>2. How Information Is Used</h2>
-          <p style={{ color: '#475569', lineHeight: 1.7 }}>
-            Data is strictly used to organize product demonstrations, configure sandbox access, coordinate onboarding schedules, and answer inquiries. We do not sell or monetize personal information.
-          </p>
-        </section>
-
-        <section style={{ marginBottom: '32px' }}>
-          <h2 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '14px', color: '#0f172a' }}>3. Questions and Rights</h2>
-          <p style={{ color: '#475569', lineHeight: 1.7 }}>
-            For privacy inquiries or data requests, please visit our <Link to="/contact" style={{ color: '#4f46e5' }}>Contact Page</Link>.
-          </p>
-        </section>
+        <div className="legal-contact-card">
+          <div>
+            <h3>Privacy enquiries</h3>
+            <p>
+              Reach our team directly at <a href="mailto:info@arcstone.one">info@arcstone.one</a>
+            </p>
+          </div>
+          <Link to="/contact" className="legal-cta">
+            Get in touch →
+          </Link>
+        </div>
       </div>
     </div>
   );

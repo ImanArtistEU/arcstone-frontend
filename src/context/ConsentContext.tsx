@@ -1,134 +1,150 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 
-export interface ConsentSettings {
-  ad_storage: boolean;
-  ad_user_data: boolean;
-  ad_personalization: boolean;
-  analytics_storage: boolean;
-  functionality_storage: boolean;
-  security_storage: boolean;
+export interface ConsentChoices {
+  necessary: boolean;
+  analytics: boolean;
+  marketing: boolean;
+}
+
+interface StoredConsent {
+  version: number;
+  timestamp: number;
+  choices: ConsentChoices;
 }
 
 interface ConsentContextType {
-  consent: ConsentSettings | null;
-  hasDecided: boolean;
-  isPreferencesOpen: boolean;
+  choices: ConsentChoices;
+  hasResponded: boolean;
+  bannerVisible: boolean;
+  preferencesOpen: boolean;
+  acceptAll: () => void;
+  rejectAll: () => void;
+  savePreferences: (prefs: { analytics: boolean; marketing: boolean }) => void;
   openPreferences: () => void;
   closePreferences: () => void;
-  acceptAll: () => void;
-  denyAll: () => void;
-  savePreferences: (settings: Partial<ConsentSettings>) => void;
 }
 
-const defaultConsent: ConsentSettings = {
-  ad_storage: false,
-  ad_user_data: false,
-  ad_personalization: false,
-  analytics_storage: false,
-  functionality_storage: true,
-  security_storage: true,
+const STORAGE_KEY = 'arcstone_consent';
+const TTL_MS = 4320 * 60 * 60 * 1000; // 180 days
+
+const defaultChoices: ConsentChoices = {
+  necessary: true,
+  analytics: false,
+  marketing: false,
 };
+
+function readStoredConsent(): StoredConsent | null {
+  if (typeof window === 'undefined') return null;
+  let raw: string | null = null;
+  try {
+    raw = localStorage.getItem(STORAGE_KEY);
+  } catch {
+    raw = null;
+  }
+  if (!raw) {
+    const match = document.cookie.match(new RegExp(`(?:^|; )${STORAGE_KEY}=([^;]*)`));
+    raw = match ? decodeURIComponent(match[1]) : null;
+  }
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(raw) as StoredConsent;
+    if (parsed.version !== 1 || Date.now() - parsed.timestamp > TTL_MS) {
+      return null;
+    }
+    return {
+      version: parsed.version,
+      timestamp: parsed.timestamp,
+      choices: {
+        necessary: true,
+        analytics: Boolean(parsed.choices?.analytics),
+        marketing: Boolean(parsed.choices?.marketing),
+      },
+    };
+  } catch {
+    return null;
+  }
+}
+
+function writeStoredConsent(record: StoredConsent) {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(record));
+  } catch {}
+  const encoded = encodeURIComponent(JSON.stringify(record));
+  const maxAge = Math.floor(TTL_MS / 1000);
+  const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+  document.cookie = `${STORAGE_KEY}=${encoded}; Max-Age=${maxAge}; Path=/; SameSite=Lax${secure}`;
+}
+
+function syncGtag(choices: ConsentChoices) {
+  if (typeof window === 'undefined') return;
+  const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
+  if (typeof gtag === 'function') {
+    gtag('consent', 'update', {
+      analytics_storage: choices.analytics ? 'granted' : 'denied',
+      ad_storage: choices.marketing ? 'granted' : 'denied',
+      ad_user_data: choices.marketing ? 'granted' : 'denied',
+      ad_personalization: choices.marketing ? 'granted' : 'denied',
+    });
+  }
+}
 
 const ConsentContext = createContext<ConsentContextType | undefined>(undefined);
 
 export const ConsentProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [consent, setConsent] = useState<ConsentSettings | null>(null);
-  const [hasDecided, setHasDecided] = useState<boolean>(true); // start closed to avoid flash, then check storage
-  const [isPreferencesOpen, setIsPreferencesOpen] = useState(false);
+  const [record, setRecord] = useState<StoredConsent | null>(() => readStoredConsent());
+  const [choices, setChoices] = useState<ConsentChoices>(() => readStoredConsent()?.choices ?? defaultChoices);
+  const [preferencesOpen, setPreferencesOpen] = useState(false);
+
+  const hasResponded = record !== null;
+  const bannerVisible = !hasResponded;
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem('arcstone_consent');
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        setConsent(parsed);
-        setHasDecided(true);
-        updateGtagConsent(parsed);
-      } else {
-        setHasDecided(false);
-      }
-    } catch {
-      setHasDecided(false);
-    }
+    syncGtag(choices);
+  }, [choices]);
+
+  const commitChoices = useCallback((newChoices: { analytics: boolean; marketing: boolean }) => {
+    const full: ConsentChoices = {
+      necessary: true,
+      analytics: newChoices.analytics,
+      marketing: newChoices.marketing,
+    };
+    const rec: StoredConsent = {
+      version: 1,
+      timestamp: Date.now(),
+      choices: full,
+    };
+    writeStoredConsent(rec);
+    setChoices(full);
+    setRecord(rec);
+    setPreferencesOpen(false);
   }, []);
 
-  const updateGtagConsent = (settings: ConsentSettings) => {
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('consent', 'update', {
-        ad_storage: settings.ad_storage ? 'granted' : 'denied',
-        ad_user_data: settings.ad_user_data ? 'granted' : 'denied',
-        ad_personalization: settings.ad_personalization ? 'granted' : 'denied',
-        analytics_storage: settings.analytics_storage ? 'granted' : 'denied',
-        functionality_storage: 'granted',
-        security_storage: 'granted',
-      });
-    }
-  };
-
-  const acceptAll = () => {
-    const fullConsent: ConsentSettings = {
-      ad_storage: true,
-      ad_user_data: true,
-      ad_personalization: true,
-      analytics_storage: true,
-      functionality_storage: true,
-      security_storage: true,
-    };
-    setConsent(fullConsent);
-    setHasDecided(true);
-    setIsPreferencesOpen(false);
-    try {
-      localStorage.setItem('arcstone_consent', JSON.stringify(fullConsent));
-    } catch {}
-    updateGtagConsent(fullConsent);
-  };
-
-  const denyAll = () => {
-    const minimalConsent: ConsentSettings = {
-      ...defaultConsent,
-    };
-    setConsent(minimalConsent);
-    setHasDecided(true);
-    setIsPreferencesOpen(false);
-    try {
-      localStorage.setItem('arcstone_consent', JSON.stringify(minimalConsent));
-    } catch {}
-    updateGtagConsent(minimalConsent);
-  };
-
-  const savePreferences = (settings: Partial<ConsentSettings>) => {
-    const updated: ConsentSettings = {
-      ...defaultConsent,
-      ...consent,
-      ...settings,
-      functionality_storage: true,
-      security_storage: true,
-    };
-    setConsent(updated);
-    setHasDecided(true);
-    setIsPreferencesOpen(false);
-    try {
-      localStorage.setItem('arcstone_consent', JSON.stringify(updated));
-    } catch {}
-    updateGtagConsent(updated);
-  };
-
-  return (
-    <ConsentContext.Provider
-      value={{
-        consent,
-        hasDecided,
-        isPreferencesOpen,
-        openPreferences: () => setIsPreferencesOpen(true),
-        closePreferences: () => setIsPreferencesOpen(false),
-        acceptAll,
-        denyAll,
-        savePreferences,
-      }}
-    >
-      {children}
-    </ConsentContext.Provider>
+  const acceptAll = useCallback(() => commitChoices({ analytics: true, marketing: true }), [commitChoices]);
+  const rejectAll = useCallback(() => commitChoices({ analytics: false, marketing: false }), [commitChoices]);
+  const savePreferences = useCallback(
+    (prefs: { analytics: boolean; marketing: boolean }) => commitChoices(prefs),
+    [commitChoices]
   );
+  const openPreferences = useCallback(() => setPreferencesOpen(true), []);
+  const closePreferences = useCallback(() => setPreferencesOpen(false), []);
+
+  const value = useMemo(
+    () => ({
+      choices,
+      hasResponded,
+      bannerVisible,
+      preferencesOpen,
+      acceptAll,
+      rejectAll,
+      savePreferences,
+      openPreferences,
+      closePreferences,
+    }),
+    [choices, hasResponded, bannerVisible, preferencesOpen, acceptAll, rejectAll, savePreferences, openPreferences, closePreferences]
+  );
+
+  return <ConsentContext.Provider value={value}>{children}</ConsentContext.Provider>;
 };
 
 export const useConsent = () => {

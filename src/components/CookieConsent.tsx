@@ -1,199 +1,183 @@
-import React, { useState } from 'react';
-import { useConsent } from '../context/ConsentContext';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useConsent } from '../context/ConsentContext';
+
+const categories = [
+  {
+    key: 'necessary' as const,
+    title: 'Strictly necessary',
+    description:
+      'Required for the site to function — security (anti-spam), form submission, and remembering your cookie choices. These cannot be switched off.',
+    always: true,
+  },
+  {
+    key: 'analytics' as const,
+    title: 'Analytics & performance',
+    description:
+      'Help us understand how the site is used so we can improve it (Google Analytics via Google Tag Manager, and Datadog performance monitoring).',
+    always: false,
+  },
+  {
+    key: 'marketing' as const,
+    title: 'Marketing & media',
+    description:
+      'Used for advertising and campaign measurement. These may set cookies from third parties.',
+    always: false,
+  },
+];
 
 export const CookieConsent: React.FC = () => {
   const {
-    hasDecided,
-    isPreferencesOpen,
-    closePreferences,
+    bannerVisible,
+    preferencesOpen,
     acceptAll,
-    denyAll,
+    rejectAll,
+    openPreferences,
+    closePreferences,
+    choices,
     savePreferences,
-    consent,
+    hasResponded,
   } = useConsent();
 
-  const [analytics, setAnalytics] = useState(consent?.analytics_storage ?? false);
-  const [marketing, setMarketing] = useState(consent?.ad_storage ?? false);
+  const [analytics, setAnalytics] = useState(choices.analytics);
+  const [marketing, setMarketing] = useState(choices.marketing);
 
-  const handleSave = () => {
-    savePreferences({
-      analytics_storage: analytics,
-      ad_storage: marketing,
-      ad_user_data: marketing,
-      ad_personalization: marketing,
-    });
-  };
+  useEffect(() => {
+    if (preferencesOpen) {
+      setAnalytics(choices.analytics);
+      setMarketing(choices.marketing);
+    }
+  }, [preferencesOpen, choices.analytics, choices.marketing]);
+
+  useEffect(() => {
+    if (!preferencesOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && hasResponded) {
+        closePreferences();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [preferencesOpen, hasResponded, closePreferences]);
 
   return (
     <>
-      {/* Floating Banner */}
-      {!hasDecided && (
-        <div
-          id="cookie-banner"
-          style={{
-            position: 'fixed',
-            bottom: '24px',
-            left: '24px',
-            right: '24px',
-            maxWidth: '560px',
-            margin: '0 auto',
-            background: 'var(--card-bg, #ffffff)',
-            borderRadius: '16px',
-            padding: '24px',
-            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.15)',
-            border: '1px solid rgba(226, 232, 240, 0.8)',
-            zIndex: 9999,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
-            <div style={{ fontSize: '24px' }}>🍪</div>
-            <div>
-              <div style={{ fontSize: '15px', fontWeight: 600, marginBottom: '6px' }}>
-                Cookie & Privacy Choices
-              </div>
-              <p style={{ fontSize: '13.5px', color: '#64748b', margin: 0, lineHeight: 1.5 }}>
-                We use cookies and similar technologies to ensure site security, analyze performance, and understand how visitors interact with our platform. You can review our{' '}
-                <Link to="/cookie-policy" style={{ color: '#4f46e5', textDecoration: 'underline' }}>
+      {bannerVisible && !preferencesOpen && (
+        <div className="cookie-banner" role="dialog" aria-modal="false" aria-label="Cookie consent">
+          <div className="cookie-banner-inner">
+            <div className="cookie-banner-text">
+              <h2 className="cookie-banner-title">We value your privacy</h2>
+              <p className="cookie-banner-copy">
+                We use cookies to run this site and, with your permission, to measure performance and improve your experience. You can accept all cookies, reject optional ones, or choose what to allow. Read our{' '}
+                <Link to="/cookie-policy" className="cookie-link">
                   Cookie Policy
-                </Link>{' '}
-                to learn more.
+                </Link>
+                .
               </p>
             </div>
-          </div>
-
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'flex-end' }}>
-            <button
-              type="button"
-              onClick={denyAll}
-              className="btn is-ghost"
-              style={{ padding: '8px 16px', fontSize: '13px' }}
-            >
-              Essential Only
-            </button>
-            <button
-              type="button"
-              onClick={acceptAll}
-              className="btn is-primary"
-              style={{ padding: '8px 18px', fontSize: '13px' }}
-            >
-              Accept All
-            </button>
+            <div className="cookie-banner-actions">
+              <button
+                type="button"
+                className="cookie-btn cookie-btn-ghost"
+                onClick={openPreferences}
+              >
+                Manage preferences
+              </button>
+              <button
+                type="button"
+                className="cookie-btn cookie-btn-secondary"
+                onClick={rejectAll}
+              >
+                Reject all
+              </button>
+              <button
+                type="button"
+                className="cookie-btn cookie-btn-primary"
+                onClick={acceptAll}
+              >
+                Accept all
+              </button>
+            </div>
           </div>
         </div>
       )}
 
-      {/* Preferences Modal */}
-      {isPreferencesOpen && (
+      {preferencesOpen && (
         <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(15, 23, 42, 0.6)',
-            backdropFilter: 'blur(4px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 10000,
-            padding: '20px',
+          className="cookie-modal-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Cookie preferences"
+          onClick={(e) => {
+            if (e.target === e.currentTarget && hasResponded) {
+              closePreferences();
+            }
           }}
-          onClick={closePreferences}
         >
-          <div
-            style={{
-              background: '#ffffff',
-              borderRadius: '20px',
-              maxWidth: '520px',
-              width: '100%',
-              padding: '28px',
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-              position: 'relative',
-            }}
-            onClick={e => e.stopPropagation()}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <h3 style={{ margin: 0, fontSize: '20px', fontWeight: 700, color: '#0f172a' }}>
-                Cookie Preferences
-              </h3>
-              <button
-                type="button"
-                onClick={closePreferences}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  fontSize: '22px',
-                  cursor: 'pointer',
-                  color: '#94a3b8',
-                }}
-              >
-                ✕
-              </button>
+          <div className="cookie-modal">
+            <div className="cookie-modal-header">
+              <h2 className="cookie-modal-title">Cookie preferences</h2>
+              {hasResponded && (
+                <button
+                  type="button"
+                  className="cookie-modal-close"
+                  aria-label="Close"
+                  onClick={closePreferences}
+                >
+                  ×
+                </button>
+              )}
             </div>
 
-            <p style={{ fontSize: '14px', color: '#64748b', lineHeight: 1.6, marginBottom: '24px' }}>
-              Manage your cookie preferences below. Essential cookies are required for platform navigation and security.
+            <p className="cookie-modal-intro">
+              Choose which categories of cookies you allow. For details on each cookie we use, see our{' '}
+              <Link to="/cookie-policy" className="cookie-link" onClick={closePreferences}>
+                Cookie Policy
+              </Link>
+              .
             </p>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '18px', marginBottom: '28px' }}>
-              {/* Essential */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 14px', background: '#f8fafc', borderRadius: '12px' }}>
-                <div>
-                  <div style={{ fontWeight: 600, fontSize: '14px', color: '#0f172a' }}>Strictly Necessary</div>
-                  <div style={{ fontSize: '12.5px', color: '#64748b' }}>Required for core website security and operation.</div>
+            <div className="cookie-modal-categories">
+              {categories.map((cat) => (
+                <div className="cookie-category" key={cat.key}>
+                  <div className="cookie-category-head">
+                    <span className="cookie-category-title">{cat.title}</span>
+                    {cat.always ? (
+                      <span className="cookie-category-badge">Always active</span>
+                    ) : (
+                      <label className="cookie-switch">
+                        <input
+                          type="checkbox"
+                          checked={cat.key === 'analytics' ? analytics : marketing}
+                          onChange={(e) =>
+                            cat.key === 'analytics'
+                              ? setAnalytics(e.target.checked)
+                              : setMarketing(e.target.checked)
+                          }
+                        />
+                        <span className="cookie-slider" />
+                      </label>
+                    )}
+                  </div>
+                  <p className="cookie-category-desc">{cat.description}</p>
                 </div>
-                <span style={{ fontSize: '12px', fontWeight: 600, color: '#16a34a', background: '#dcfce7', padding: '4px 8px', borderRadius: '6px' }}>
-                  Always Active
-                </span>
-              </div>
-
-              {/* Analytics */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 14px', background: '#f8fafc', borderRadius: '12px' }}>
-                <div>
-                  <div style={{ fontWeight: 600, fontSize: '14px', color: '#0f172a' }}>Analytics Cookies</div>
-                  <div style={{ fontSize: '12.5px', color: '#64748b' }}>Help us measure and understand visitor engagement.</div>
-                </div>
-                <input
-                  type="checkbox"
-                  checked={analytics}
-                  onChange={e => setAnalytics(e.target.checked)}
-                  style={{ width: '18px', height: '18px', accentColor: '#4f46e5', cursor: 'pointer' }}
-                />
-              </div>
-
-              {/* Marketing */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 14px', background: '#f8fafc', borderRadius: '12px' }}>
-                <div>
-                  <div style={{ fontWeight: 600, fontSize: '14px', color: '#0f172a' }}>Marketing & Personalization</div>
-                  <div style={{ fontSize: '12.5px', color: '#64748b' }}>Used to tailor relevant updates and outreach.</div>
-                </div>
-                <input
-                  type="checkbox"
-                  checked={marketing}
-                  onChange={e => setMarketing(e.target.checked)}
-                  style={{ width: '18px', height: '18px', accentColor: '#4f46e5', cursor: 'pointer' }}
-                />
-              </div>
+              ))}
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+            <div className="cookie-modal-actions">
               <button
                 type="button"
-                onClick={closePreferences}
-                className="btn is-ghost"
-                style={{ padding: '8px 18px', fontSize: '13px' }}
+                className="cookie-btn cookie-btn-secondary"
+                onClick={rejectAll}
               >
-                Cancel
+                Reject all
               </button>
               <button
                 type="button"
-                onClick={handleSave}
-                className="btn is-primary"
-                style={{ padding: '8px 20px', fontSize: '13px' }}
+                className="cookie-btn cookie-btn-primary"
+                onClick={() => savePreferences({ analytics, marketing })}
               >
-                Save Preferences
+                Save preferences
               </button>
             </div>
           </div>

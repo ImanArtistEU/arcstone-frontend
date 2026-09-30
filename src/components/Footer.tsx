@@ -1,100 +1,214 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTheme } from '../context/ThemeContext';
 import { useConsent } from '../context/ConsentContext';
 
 export const Footer: React.FC = () => {
+  const { theme } = useTheme();
   const { openPreferences } = useConsent();
 
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (status === 'loading' || status === 'success') return;
+
+    if (!name.trim() || !email.trim()) {
+      setErrorMessage('Please enter your name and email address.');
+      setStatus('error');
+      return;
+    }
+
+    setStatus('loading');
+    // Simulated frontend submission
+    setTimeout(() => {
+      setStatus('success');
+    }, 400);
+  };
+
+  const isLoading = status === 'loading';
+
   return (
-    <footer className="footer wf-section">
+    <section className="footer">
       <div className="container w-container">
-        <div className="footer-top" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '40px', paddingBottom: '60px' }}>
-          {/* Brand Column */}
-          <div className="footer-brand" style={{ maxWidth: '300px' }}>
-            <Link to="/" style={{ textDecoration: 'none' }}>
-              <div className="custom-logo-text" style={{ fontSize: '24px', fontWeight: 700, marginBottom: '16px' }}>
-                arcstone.
+        <div className="footer-newsletter-wrap">
+          <h3 className="footer-title">
+            Sign up to our <br />
+            newsletter
+          </h3>
+          <div className="footer-form-container">
+            <div
+              className="content-text"
+              style={{ marginBottom: '32px', fontSize: '16px', color: '#475569' }}
+            >
+              Keep up with the latest Arcstone news and platform updates
+            </div>
+
+            {status === 'success' ? (
+              <div
+                style={{
+                  paddingTop: '16px',
+                  fontSize: '15px',
+                  color: '#16a34a',
+                  fontWeight: 500,
+                }}
+              >
+                Thank you for signing up!
               </div>
-            </Link>
-            <p style={{ color: '#64748b', fontSize: '14px', lineHeight: 1.6, margin: 0 }}>
-              The single verified ledger for equity management, investor coordination, and capital events across private firms.
-            </p>
-          </div>
-
-          {/* Solutions Column */}
-          <div>
-            <h4 style={{ fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#94a3b8', fontWeight: 700, marginBottom: '20px' }}>
-              Solutions
-            </h4>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <li><Link to="/platform" className="footer-link">Platform Overview</Link></li>
-              <li><Link to="/manage-ownership" className="footer-link">Manage Ownership</Link></li>
-              <li><Link to="/manage-distributions" className="footer-link">Manage Distributions</Link></li>
-              <li><Link to="/administer-investors" className="footer-link">Administer Investors</Link></li>
-              <li><Link to="/raise-capital" className="footer-link">Raise Capital</Link></li>
-            </ul>
-          </div>
-
-          {/* Company Column */}
-          <div>
-            <h4 style={{ fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#94a3b8', fontWeight: 700, marginBottom: '20px' }}>
-              Company
-            </h4>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <li><Link to="/start-ups" className="footer-link">For Start-ups</Link></li>
-              <li><Link to="/private-firms" className="footer-link">For Private Firms</Link></li>
-              <li><Link to="/about-us" className="footer-link">About Us</Link></li>
-              <li><Link to="/careers" className="footer-link">Careers</Link></li>
-              <li><Link to="/contact" className="footer-link">Contact</Link></li>
-            </ul>
-          </div>
-
-          {/* Legal Column */}
-          <div>
-            <h4 style={{ fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#94a3b8', fontWeight: 700, marginBottom: '20px' }}>
-              Legal & Privacy
-            </h4>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <li><Link to="/privacy-policy" className="footer-link">Privacy Policy</Link></li>
-              <li><Link to="/terms-and-conditions" className="footer-link">Terms & Conditions</Link></li>
-              <li><Link to="/cookie-policy" className="footer-link">Cookie Policy</Link></li>
-              <li><Link to="/legal-and-regulatory" className="footer-link">Legal & Regulatory</Link></li>
-              <li>
-                <button
-                  type="button"
-                  onClick={openPreferences}
-                  className="footer-link footer-cookie-settings"
-                  style={{ background: 'none', border: 'none', padding: 0, font: 'inherit', cursor: 'pointer', textAlign: 'left', color: '#64748b' }}
+            ) : (
+              <form onSubmit={handleSubmit} noValidate>
+                <div
+                  style={{
+                    display: 'flex',
+                    gap: '32px',
+                    flexWrap: 'wrap',
+                    marginBottom: '32px',
+                  }}
                 >
-                  Cookie Settings
-                </button>
-              </li>
-            </ul>
+                  <div className="footer-input-wrap">
+                    <input
+                      name="Name"
+                      placeholder="Name"
+                      type="text"
+                      required
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      disabled={isLoading}
+                    />
+                  </div>
+                  <div className="footer-input-wrap">
+                    <input
+                      name="Email"
+                      placeholder="Email"
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      disabled={isLoading}
+                    />
+                  </div>
+                </div>
+
+                <div
+                  className="content-text"
+                  style={{ fontSize: '14px', marginBottom: '24px', color: '#64748b' }}
+                >
+                  You accept the{' '}
+                  <Link to="/terms-and-conditions" className="link-item">
+                    Terms &amp; Conditions
+                  </Link>{' '}
+                  and{' '}
+                  <Link to="/privacy-policy" className="link-item">
+                    Privacy Policy
+                  </Link>{' '}
+                  by submitting your request.
+                </div>
+
+                {status === 'error' && (
+                  <div style={{ fontSize: '13px', color: '#dc2626', marginBottom: '16px' }}>
+                    {errorMessage || 'Something went wrong. Please try again.'}
+                  </div>
+                )}
+
+                <div>
+                  <input
+                    type="submit"
+                    className="button w-button"
+                    value={isLoading ? 'Sending…' : 'Submit'}
+                    disabled={isLoading}
+                  />
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+
+        <div className="divider is-gray" />
+
+        <div className="footer-links-wrap">
+          <div className="footer-menu">
+            <Link to="/start-ups" className="footer-menu-link">
+              Start ups
+            </Link>
+            <Link to="/private-firms" className="footer-menu-link">
+              Private firms
+            </Link>
+            <Link to="/about-us" className="footer-menu-link">
+              About us
+            </Link>
+            <Link to="/contact" className="footer-menu-link">
+              Contact us
+            </Link>
+            <Link to="/legal-and-regulatory" className="footer-menu-link">
+              Legal &amp; Regulatory
+            </Link>
+            <Link to="/privacy-policy" className="footer-menu-link">
+              Privacy Policy
+            </Link>
+            <Link to="/terms-and-conditions" className="footer-menu-link">
+              Terms &amp; Conditions
+            </Link>
+            <Link to="/cookie-policy" className="footer-menu-link">
+              Cookie Policy
+            </Link>
+            <button
+              type="button"
+              className="footer-menu-link footer-cookie-settings"
+              onClick={openPreferences}
+            >
+              Cookie settings
+            </button>
+          </div>
+
+          <div className="footer-social-wrap">
+            <div className="footer-social-title">Follow us</div>
+            <div className="footer-menu" style={{ gap: '16px' }}>
+              <a
+                href="https://www.linkedin.com/company/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="footer-menu-link"
+                style={{ textDecoration: 'underline' }}
+              >
+                LinkedIn
+              </a>
+            </div>
           </div>
         </div>
 
         <div
-          className="footer-bottom"
+          className="footer-legal-wrap"
           style={{
-            borderTop: '1px solid rgba(226, 232, 240, 0.8)',
-            paddingTop: '28px',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
             flexWrap: 'wrap',
             gap: '16px',
-            fontSize: '13px',
-            color: '#94a3b8',
+            maxWidth: '100%',
+            width: '100%',
           }}
         >
-          <div>© {new Date().getFullYear()} Arcstone. All rights reserved.</div>
-          <div style={{ display: 'flex', gap: '20px' }}>
-            <Link to="/privacy-policy" style={{ color: 'inherit', textDecoration: 'none' }}>Privacy</Link>
-            <Link to="/terms-and-conditions" style={{ color: 'inherit', textDecoration: 'none' }}>Terms</Link>
-            <Link to="/cookie-policy" style={{ color: 'inherit', textDecoration: 'none' }}>Cookies</Link>
-          </div>
+          <span>© 2026 Arcstone. All rights reserved.</span>
+          <a
+            href="https://startit-x.com/en/accelerate/start-it-kbc"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src={theme === 'dark' ? '/wf/KBCwhite.png' : '/wf/KBCblack.png'}
+              alt="Start it @KBC"
+              width={1604}
+              height={286}
+              style={{ height: '44px', width: 'auto', display: 'block' }}
+            />
+          </a>
         </div>
+
+        <div className="footer-huge-text">Manage Reality</div>
       </div>
-    </footer>
+    </section>
   );
 };

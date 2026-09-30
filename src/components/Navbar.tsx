@@ -2,203 +2,295 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 
-const darkHeroPages = new Set([
+const darkHeroRoutes = new Set([
   '/contact',
   '/waitlist',
   '/privacy-policy',
   '/terms-and-conditions',
-  '/cookie-policy',
-  '/legal-and-regulatory'
 ]);
 
 export const Navbar: React.FC = () => {
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isHidden, setIsHidden] = useState(false);
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const [isSolutionsOpen, setIsSolutionsOpen] = useState(false);
-  const [lastPath, setLastPath] = useState(location.pathname);
-  const lastScrollY = useRef(0);
-  const solutionsRef = useRef<HTMLDivElement>(null);
+  const isDark = theme === 'dark';
 
-  const isOnDarkHero = darkHeroPages.has(location.pathname);
+  const [scrolled, setScrolled] = useState(false);
+  const [navHidden, setNavHidden] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [solutionsOpen, setSolutionsOpen] = useState(false);
+  const [currentPath, setCurrentPath] = useState(location.pathname);
+
+  const lastScrollY = useRef(0);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const isOnDarkHero = darkHeroRoutes.has(location.pathname);
 
   // Close menus on route change
-  if (location.pathname !== lastPath) {
-    setLastPath(location.pathname);
-    setIsMobileOpen(false);
-    setIsSolutionsOpen(false);
+  if (location.pathname !== currentPath) {
+    setCurrentPath(location.pathname);
+    setMobileMenuOpen(false);
+    setSolutionsOpen(false);
   }
 
-  // Scroll detection for header hide/reveal
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
-      setIsScrolled(currentScrollY > 20);
-
-      if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
-        setIsHidden(true);
+      const y = window.pageYOffset || document.documentElement.scrollTop;
+      setScrolled(y > 20);
+      if (y > lastScrollY.current && y > 100) {
+        setNavHidden(true);
       } else {
-        setIsHidden(false);
+        setNavHidden(false);
       }
-      lastScrollY.current = currentScrollY <= 0 ? 0 : currentScrollY;
+      lastScrollY.current = y <= 0 ? 0 : y;
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Click outside listener for dropdown
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (solutionsRef.current && !solutionsRef.current.contains(event.target as Node)) {
-        setIsSolutionsOpen(false);
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setSolutionsOpen(false);
       }
     };
     document.addEventListener('click', handleClickOutside);
     return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
+  const navbarClasses = [
+    'custom-navbar',
+    scrolled ? 'scrolled' : '',
+    navHidden ? 'nav-hidden' : '',
+    isOnDarkHero ? 'is-on-dark-hero' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return (
-    <header
-      id="custom-navbar"
-      className={[
-        'custom-navbar',
-        isScrolled ? 'scrolled' : '',
-        isHidden ? 'nav-hidden' : '',
-        isOnDarkHero ? 'is-on-dark-hero' : '',
-      ]
-        .filter(Boolean)
-        .join(' ')}
-    >
+    <header className={navbarClasses} id="custom-navbar">
       <div className="custom-nav-container">
-        {/* Brand Logo */}
-        <Link to="/" className="logo-wrap" style={{ textDecoration: 'none' }}>
+        <Link to="/" aria-current="page" className="logo-wrap" style={{ textDecoration: 'none' }}>
           <div className="custom-logo-text">arcstone.</div>
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className={`custom-nav-menu${isMobileOpen ? ' is-open' : ''}`} id="custom-nav-menu">
+        <nav className={`custom-nav-menu${mobileMenuOpen ? ' is-open' : ''}`} id="custom-nav-menu">
           <Link className="custom-nav-link" to="/platform">
             Platform
           </Link>
 
-          {/* Solutions Dropdown */}
-          <div className={`nav-drop${isSolutionsOpen ? ' open' : ''}`} ref={solutionsRef}>
+          <div className={`nav-drop${solutionsOpen ? ' open' : ''}`} data-drop="" ref={dropdownRef}>
             <button
-              type="button"
               className="nav-drop-btn"
-              onClick={e => {
+              type="button"
+              onClick={(e) => {
                 e.stopPropagation();
-                setIsSolutionsOpen(!isSolutionsOpen);
+                setSolutionsOpen((prev) => !prev);
               }}
             >
               Solutions
-              <svg className="chev" viewBox="0 0 10 6" fill="none" width="10" height="6">
-                <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              <svg className="chev" viewBox="0 0 12 12">
+                <polyline points="2,4 6,8 10,4" />
               </svg>
             </button>
 
-            <div className="nav-drop-menu">
-              <Link to="/manage-ownership" className="nav-drop-item">
-                <span className="nav-drop-item-title">Manage Ownership</span>
-                <span className="nav-drop-item-desc">Live verified records across every equity event.</span>
-              </Link>
-              <Link to="/manage-distributions" className="nav-drop-item">
-                <span className="nav-drop-item-title">Manage Distributions</span>
-                <span className="nav-drop-item-desc">Track entitlements and payouts from the same ledger.</span>
-              </Link>
-              <Link to="/administer-investors" className="nav-drop-item">
-                <span className="nav-drop-item-title">Administer Investors</span>
-                <span className="nav-drop-item-desc">Dedicated onboarding, KYC, and direct investor portal.</span>
-              </Link>
-              <Link to="/raise-capital" className="nav-drop-item">
-                <span className="nav-drop-item-title">Raise Capital</span>
-                <span className="nav-drop-item-desc">Issue digital shares and coordinate round closes securely.</span>
-              </Link>
+            <div className="nav-drop-panel cols-2" style={{ minWidth: '580px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px' }}>
+                <div className="ndp-col-header">Capital &amp; Ownership</div>
+                <div className="ndp-col-header">Administration</div>
+
+                <Link className="ndp-item" to="/raise-capital" onClick={() => setSolutionsOpen(false)}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                    <svg
+                      style={{ flexShrink: 0, marginTop: '1px' }}
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#94a3b8"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                      <polyline points="17 6 23 6 23 12" />
+                    </svg>
+                    <div>
+                      <div className="ndp-name">Raise Capital</div>
+                      <div className="ndp-desc">
+                        Structured investor participation without unnecessary governance complexity.
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+
+                <Link className="ndp-item" to="/administer-investors" onClick={() => setSolutionsOpen(false)}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                    <svg
+                      style={{ flexShrink: 0, marginTop: '1px' }}
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#94a3b8"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                      <circle cx="9" cy="7" r="4" />
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                    <div>
+                      <div className="ndp-name">Administer Investors</div>
+                      <div className="ndp-desc">
+                        Onboarding, records, updates, and lifecycle workflows in one place.
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+
+                <Link className="ndp-item" to="/manage-ownership" onClick={() => setSolutionsOpen(false)}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                    <svg
+                      style={{ flexShrink: 0, marginTop: '1px' }}
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#94a3b8"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <rect x="3" y="3" width="18" height="18" rx="2" />
+                      <path d="M9 3v18M3 9h6M3 15h6" />
+                    </svg>
+                    <div>
+                      <div className="ndp-name">Manage Ownership</div>
+                      <div className="ndp-desc">
+                        Cap tables, rights, documents, and investors in one live record.
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+
+                <Link className="ndp-item" to="/manage-distributions" onClick={() => setSolutionsOpen(false)}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                    <svg
+                      style={{ flexShrink: 0, marginTop: '1px' }}
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#94a3b8"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="12" y1="8" x2="12" y2="12" />
+                      <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    <div>
+                      <div className="ndp-name">Manage Distributions</div>
+                      <div className="ndp-desc">
+                        Post-raise administration, governance, and reporting from one record.
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+
+                <div style={{ gridColumn: '1/-1', margin: '4px 0 0' }}>
+                  <div className="ndp-divider" />
+                  <Link
+                    className="ndp-item ndp-span"
+                    to="/platform"
+                    onClick={() => setSolutionsOpen(false)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      gap: '16px',
+                      background: '#f8fafc',
+                      margin: '4px 0 0',
+                    }}
+                  >
+                    <div>
+                      <div className="ndp-name">Full Ownership Infrastructure</div>
+                      <div className="ndp-desc">
+                        Equity management, investor workflows, governance, and lifecycle administration on one data layer.
+                      </div>
+                    </div>
+                    <span
+                      style={{
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        color: '#0f172a',
+                        whiteSpace: 'nowrap',
+                        flexShrink: 0,
+                      }}
+                    >
+                      Explore platform →
+                    </span>
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
 
-          <Link className="custom-nav-link" to="/start-ups">
-            Start-ups
-          </Link>
-          <Link className="custom-nav-link" to="/private-firms">
-            Private Firms
-          </Link>
           <Link className="custom-nav-link" to="/about-us">
-            About Us
-          </Link>
-          <Link className="custom-nav-link" to="/careers">
-            Careers
-          </Link>
-          <Link className="custom-nav-link" to="/contact">
-            Contact
+            Company
           </Link>
 
-          {/* Mobile Actions */}
-          <div className="custom-nav-mobile-actions">
-            <Link to="/waitlist" className="btn is-primary w-button">
-              Request Access
+          <div className="custom-nav-actions">
+            <Link to="/waitlist" className="custom-nav-button">
+              Book a demo
             </Link>
+
+            <button
+              className="custom-dark-toggle"
+              id="custom-theme-toggle"
+              aria-label="Toggle dark mode"
+              type="button"
+              onClick={toggleTheme}
+            >
+              <svg
+                id="custom-theme-icon-moon"
+                viewBox="0 0 24 24"
+                style={{ display: isDark ? 'none' : 'block' }}
+              >
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+              </svg>
+              <svg
+                id="custom-theme-icon-sun"
+                viewBox="0 0 24 24"
+                style={{ display: isDark ? 'block' : 'none' }}
+              >
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+              </svg>
+            </button>
           </div>
         </nav>
 
-        {/* Right Nav Actions (Theme Toggle & CTA) */}
-        <div className="custom-nav-actions">
-          {/* Light / Dark Mode Toggle Button */}
-          <button
-            type="button"
-            className="theme-toggle-btn"
-            onClick={toggleTheme}
-            aria-label="Toggle light and dark mode"
-            title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-            style={{
-              background: 'transparent',
-              border: '1px solid rgba(148, 163, 184, 0.3)',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              padding: '6px 10px',
-              display: 'flex',
-              alignItems: 'center',
-              color: 'inherit',
-            }}
-          >
-            {theme === 'dark' ? (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="5"></circle>
-                <line x1="12" y1="1" x2="12" y2="3"></line>
-                <line x1="12" y1="21" x2="12" y2="23"></line>
-                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                <line x1="1" y1="12" x2="3" y2="12"></line>
-                <line x1="21" y1="12" x2="23" y2="12"></line>
-                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-              </svg>
-            ) : (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-              </svg>
-            )}
-          </button>
-
-          <Link to="/waitlist" className="btn is-primary w-button nav-cta-btn">
-            Request Access
-          </Link>
-
-          {/* Hamburger Icon */}
-          <button
-            type="button"
-            className={`custom-nav-toggle${isMobileOpen ? ' is-active' : ''}`}
-            onClick={() => setIsMobileOpen(!isMobileOpen)}
-            aria-label="Toggle navigation menu"
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
-        </div>
+        <button
+          className="custom-mobile-toggle"
+          id="custom-mobile-toggle"
+          aria-label="Open menu"
+          type="button"
+          onClick={() => setMobileMenuOpen((prev) => !prev)}
+        >
+          <div className="hamburger-line" />
+          <div className="hamburger-line" />
+          <div className="hamburger-line" />
+        </button>
       </div>
     </header>
   );

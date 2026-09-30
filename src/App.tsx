@@ -5,6 +5,7 @@ import { ConsentProvider } from './context/ConsentContext';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { CookieConsent } from './components/CookieConsent';
+import { SeoUpdater } from './components/SeoUpdater';
 
 // Pages
 import { Home } from './pages/Home';
@@ -28,6 +29,7 @@ import { LegalRegulatory } from './pages/LegalRegulatory';
 const RootLayout: React.FC = () => {
   return (
     <div className="app-root">
+      <SeoUpdater />
       <Navbar />
       <main id="main-content">
         <Outlet />
