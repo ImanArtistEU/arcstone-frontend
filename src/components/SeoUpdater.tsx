@@ -224,6 +224,25 @@ export const SeoUpdater: React.FC = () => {
     }
     canTag.setAttribute('href', canonicalUrl);
 
+    // Update OpenGraph & Twitter tags
+    const setMetaTag = (attr: 'name' | 'property', key: string, content: string) => {
+      let tag = document.querySelector(`meta[${attr}="${key}"]`);
+      if (!tag) {
+        tag = document.createElement('meta');
+        tag.setAttribute(attr, key);
+        document.head.appendChild(tag);
+      }
+      tag.setAttribute('content', content);
+    };
+
+    setMetaTag('property', 'og:title', meta.title);
+    setMetaTag('property', 'og:description', meta.description);
+    setMetaTag('property', 'og:url', canonicalUrl);
+    setMetaTag('property', 'og:image', `${origin}/og-image.png`);
+    setMetaTag('name', 'twitter:title', meta.title);
+    setMetaTag('name', 'twitter:description', meta.description);
+    setMetaTag('name', 'twitter:image', `${origin}/og-image.png`);
+
     // Organization & WebSite JSON-LD
     const jsonLdData: Record<string, unknown>[] = [
       {
@@ -231,7 +250,7 @@ export const SeoUpdater: React.FC = () => {
         '@type': 'Organization',
         name: 'Arcstone',
         url: origin,
-        logo: `${origin}/wf/KBCblack.png`,
+        logo: `${origin}/Logo.png`,
         description:
           'Equity management for private companies — cap tables, investor workflows, governance, and lifecycle administration in one ownership system.',
         slogan: 'Manage Reality',

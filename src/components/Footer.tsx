@@ -32,7 +32,7 @@ export const Footer: React.FC = () => {
   const isLoading = status === 'loading';
 
   return (
-    <section className="footer">
+    <footer className="footer">
       <div className="container w-container">
         <div className="footer-newsletter-wrap">
           <h3 className="footer-title">
@@ -209,6 +209,6 @@ export const Footer: React.FC = () => {
 
         <div className="footer-huge-text">Manage Reality</div>
       </div>
-    </section>
+    </footer>
   );
 };
