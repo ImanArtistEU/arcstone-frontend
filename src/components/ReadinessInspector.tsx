@@ -41,7 +41,7 @@ const initialAuditItems: AuditItem[] = [
   {
     id: 'aud-4',
     category: 'Identity',
-    title: 'Institutional Lead KYC / MiFID II Passport',
+    title: 'Institutional Lead KYC / Beneficial Ownership Passport',
     description: 'Verified ultimate beneficial owner (UBO) declaration on file for Index Partners fund vehicle.',
     impact: 'High',
     status: 'Verified',
@@ -81,11 +81,11 @@ export const ReadinessInspector: React.FC = () => {
       style={{
         margin: '64px 0',
         padding: '36px',
-        backgroundColor: '#0c0b1d',
-        borderRadius: '16px',
+        backgroundColor: '#0a0e1c',
+        borderRadius: '14px',
         border: '1px solid rgba(255, 255, 255, 0.08)',
         color: '#f8fafc',
-        boxShadow: '0 20px 48px rgba(0, 0, 0, 0.4)',
+        boxShadow: '0 8px 30px rgba(0, 0, 0, 0.25)',
         fontFamily: 'inherit',
       }}
     >

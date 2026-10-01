@@ -78,7 +78,7 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({ onBooked }) =>
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '28px' }}>
       {/* Calendar Panel */}
-      <div className="bk-cal" style={{ background: '#fff', border: '1.5px solid #e2e8f0', borderRadius: '16px', padding: '24px' }}>
+      <div className="bk-cal" style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
           <div className="bk-cal-title" style={{ fontWeight: 700, fontSize: '17px' }}>
             October 2026
@@ -118,16 +118,17 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({ onBooked }) =>
                   .join(' ')}
                 style={{
                   height: '38px',
-                  borderRadius: '10px',
+                  borderRadius: '8px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   fontWeight: isSelected ? 700 : 500,
                   fontSize: '13.5px',
                   cursor: isWeekend ? 'not-allowed' : 'pointer',
-                  border: isSelected ? '1.5px solid #4f46e5' : '1px solid transparent',
-                  background: isSelected ? '#4f46e5' : isWeekend ? '#f8fafc' : '#ffffff',
+                  border: isSelected ? '1.5px solid #6366f1' : '1px solid transparent',
+                  background: isSelected ? '#6366f1' : isWeekend ? '#f8fafc' : '#ffffff',
                   color: isSelected ? '#ffffff' : isWeekend ? '#cbd5e1' : '#0f172a',
+                  transition: 'all 0.15s ease',
                 }}
               >
                 {d}
@@ -139,7 +140,7 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({ onBooked }) =>
         {/* Legend */}
         <div className="bk-legend" style={{ display: 'flex', gap: '16px', marginTop: '20px', paddingTop: '16px', borderTop: '1px solid #f1f5f9', fontSize: '12px', color: '#64748b' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#4f46e5' }}></span> Available
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#6366f1' }}></span> Available
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#cbd5e1' }}></span> Unavailable
@@ -148,7 +149,7 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({ onBooked }) =>
       </div>
 
       {/* Slots & Details Panel */}
-      <div className="bk-panel" style={{ background: '#fff', border: '1.5px solid #e2e8f0', borderRadius: '16px', padding: '24px' }}>
+      <div className="bk-panel" style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px' }}>
         <h4 className="bk-panel-title" style={{ margin: '0 0 16px 0', fontSize: '17px', fontWeight: 700 }}>
           Available Slots: October {selectedDate}, 2026
         </h4>
@@ -168,14 +169,15 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({ onBooked }) =>
                 .join(' ')}
               style={{
                 padding: '10px 8px',
-                borderRadius: '10px',
-                border: selectedSlot === slot ? '1.5px solid #4f46e5' : '1.5px solid #e2e8f0',
-                background: selectedSlot === slot ? '#4f46e5' : '#ffffff',
+                borderRadius: '8px',
+                border: selectedSlot === slot ? '1.5px solid #6366f1' : '1.5px solid #e2e8f0',
+                background: selectedSlot === slot ? '#6366f1' : '#ffffff',
                 color: selectedSlot === slot ? '#ffffff' : '#0f172a',
                 fontWeight: 600,
                 fontSize: '13.5px',
                 cursor: 'pointer',
                 textAlign: 'center',
+                transition: 'all 0.15s ease',
               }}
             >
               {slot}

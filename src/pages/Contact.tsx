@@ -41,16 +41,16 @@ export const Contact: React.FC = () => {
               </h3>
               <ul className="contact-list" style={{ listStyle: 'none', padding: 0, margin: '0 0 32px' }}>
                 <li style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <span style={{ color: '#4f46e5' }}>✓</span> Startups looking to raise without losing control
+                  <span style={{ color: '#818cf8' }}>✓</span> Startups looking to raise without losing control
                 </li>
                 <li style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <span style={{ color: '#4f46e5' }}>✓</span> SMEs exploring revenue/profit-share financing
+                  <span style={{ color: '#818cf8' }}>✓</span> SMEs exploring revenue/profit-share financing
                 </li>
                 <li style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <span style={{ color: '#4f46e5' }}>✓</span> Platforms seeking regulated distribution infrastructure
+                  <span style={{ color: '#818cf8' }}>✓</span> Platforms seeking regulated distribution infrastructure
                 </li>
                 <li style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <span style={{ color: '#4f46e5' }}>✓</span> General partnership and API inquiries
+                  <span style={{ color: '#818cf8' }}>✓</span> General partnership and API inquiries
                 </li>
               </ul>
 

@@ -236,7 +236,7 @@ const LeadForm: React.FC<{ onSubmitted: () => void }> = ({ onSubmitted }) => {
         style={{ fontSize: '12px', marginTop: '16px', textAlign: 'center', color: '#94a3b8' }}
       >
         By submitting, you agree to our{' '}
-        <Link to="/privacy-policy" style={{ color: '#4f46e5' }}>
+        <Link to="/privacy-policy" style={{ color: '#818cf8' }}>
           Privacy Policy
         </Link>
         .
@@ -527,7 +527,12 @@ const CalendarPicker: React.FC<{ onBooked: (details: BookedDetails) => void }> =
           {!activeDay && (
             <div className="bk-panel-empty">
               <div className="bk-panel-empty-icon" aria-hidden="true">
-                🗓️
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.6 }}>
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
               </div>
               <p>Select a date to see available times.</p>
             </div>
@@ -735,7 +740,7 @@ export const Waitlist: React.FC = () => {
                         gap: '12px',
                       }}
                     >
-                      <span style={{ color: '#4f46e5', flexShrink: 0 }}>✓</span> A personalised
+                      <span style={{ color: '#818cf8', flexShrink: 0 }}>✓</span> A personalised
                       walkthrough of cap table management and investor coordination
                     </li>
                     <li
@@ -746,7 +751,7 @@ export const Waitlist: React.FC = () => {
                         gap: '12px',
                       }}
                     >
-                      <span style={{ color: '#4f46e5', flexShrink: 0 }}>✓</span> A look at governance,
+                      <span style={{ color: '#818cf8', flexShrink: 0 }}>✓</span> A look at governance,
                       reporting, and lifecycle administration
                     </li>
                     <li
@@ -757,7 +762,7 @@ export const Waitlist: React.FC = () => {
                         gap: '12px',
                       }}
                     >
-                      <span style={{ color: '#4f46e5', flexShrink: 0 }}>✓</span> Answers to your
+                      <span style={{ color: '#818cf8', flexShrink: 0 }}>✓</span> Answers to your
                       questions from a member of the Arcstone team
                     </li>
                     <li
@@ -768,7 +773,7 @@ export const Waitlist: React.FC = () => {
                         gap: '12px',
                       }}
                     >
-                      <span style={{ color: '#4f46e5', flexShrink: 0 }}>✓</span> Priority onboarding
+                      <span style={{ color: '#818cf8', flexShrink: 0 }}>✓</span> Priority onboarding
                       when the platform goes live in September
                     </li>
                   </ul>

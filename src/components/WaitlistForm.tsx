@@ -37,19 +37,19 @@ export const WaitlistForm: React.FC = () => {
         }}
       >
         <div className={`wl-step ${step >= 1 ? 'wl-step-active' : ''} ${step > 1 ? 'wl-step-done' : ''}`} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: 600 }}>
-          <span className="wl-step-dot" style={{ width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: step >= 1 ? '#4f46e5' : '#e2e8f0', color: step >= 1 ? '#fff' : '#64748b' }}>
+          <span className="wl-step-dot" style={{ width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: step >= 1 ? '#6366f1' : '#e2e8f0', color: step >= 1 ? '#fff' : '#64748b' }}>
             1
           </span>
           Profile
         </div>
         <div className={`wl-step ${step >= 2 ? 'wl-step-active' : ''} ${step > 2 ? 'wl-step-done' : ''}`} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: 600 }}>
-          <span className="wl-step-dot" style={{ width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: step >= 2 ? '#4f46e5' : '#e2e8f0', color: step >= 2 ? '#fff' : '#64748b' }}>
+          <span className="wl-step-dot" style={{ width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: step >= 2 ? '#6366f1' : '#e2e8f0', color: step >= 2 ? '#fff' : '#64748b' }}>
             2
           </span>
           Company
         </div>
         <div className={`wl-step ${step >= 3 ? 'wl-step-active' : ''}`} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: 600 }}>
-          <span className="wl-step-dot" style={{ width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: step >= 3 ? '#4f46e5' : '#e2e8f0', color: step >= 3 ? '#fff' : '#64748b' }}>
+          <span className="wl-step-dot" style={{ width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: step >= 3 ? '#6366f1' : '#e2e8f0', color: step >= 3 ? '#fff' : '#64748b' }}>
             3
           </span>
           Access
@@ -58,7 +58,7 @@ export const WaitlistForm: React.FC = () => {
 
       {/* Step 1: Role Selection */}
       {step === 1 && (
-        <div className="wl-step-panel" style={{ background: '#fff', border: '1.5px solid #e2e8f0', borderRadius: '16px', padding: '32px' }}>
+        <div className="wl-step-panel" style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '32px' }}>
           <h3 style={{ fontSize: '22px', fontWeight: 700, margin: '0 0 8px 0', color: '#0f172a' }}>
             Select your profile
           </h3>
@@ -77,11 +77,11 @@ export const WaitlistForm: React.FC = () => {
                 onClick={() => setRole(item.id)}
                 className={`wl-radio ${role === item.id ? 'wl-radio-active' : ''}`}
                 style={{
-                  border: role === item.id ? '2px solid #4f46e5' : '1.5px solid #e2e8f0',
+                  border: role === item.id ? '2px solid #6366f1' : '1.5px solid #e2e8f0',
                   borderRadius: '12px',
                   padding: '20px',
                   cursor: 'pointer',
-                  background: role === item.id ? '#eef2ff' : '#f8fafc',
+                  background: role === item.id ? '#f5f3ff' : '#f8fafc',
                   transition: 'all 0.15s ease',
                 }}
               >
@@ -110,7 +110,7 @@ export const WaitlistForm: React.FC = () => {
 
       {/* Step 2: Company Details */}
       {step === 2 && (
-        <form onSubmit={e => { e.preventDefault(); setStep(3); }} className="wl-step-panel" style={{ background: '#fff', border: '1.5px solid #e2e8f0', borderRadius: '16px', padding: '32px' }}>
+        <form onSubmit={e => { e.preventDefault(); setStep(3); }} className="wl-step-panel" style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '32px' }}>
           <h3 style={{ fontSize: '22px', fontWeight: 700, margin: '0 0 8px 0', color: '#0f172a' }}>
             Tell us about your organization
           </h3>
@@ -206,7 +206,7 @@ export const WaitlistForm: React.FC = () => {
 
       {/* Step 3: Choose Walkthrough or Standard Waitlist */}
       {step === 3 && (
-        <div className="wl-step-panel" style={{ background: '#fff', border: '1.5px solid #e2e8f0', borderRadius: '16px', padding: '32px' }}>
+        <div className="wl-step-panel" style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '32px' }}>
           {!wantsDemo && !isSubmitted ? (
             <div>
               <h3 style={{ fontSize: '22px', fontWeight: 700, margin: '0 0 8px 0', color: '#0f172a' }}>
@@ -220,14 +220,22 @@ export const WaitlistForm: React.FC = () => {
                 <div
                   onClick={() => setWantsDemo(true)}
                   style={{
-                    border: '2px solid #4f46e5',
-                    borderRadius: '14px',
+                    border: '2px solid #818cf8',
+                    borderRadius: '12px',
                     padding: '24px',
                     cursor: 'pointer',
-                    background: '#eef2ff',
+                    background: '#f5f3ff',
+                    transition: 'all 0.15s ease',
                   }}
                 >
-                  <div style={{ fontSize: '24px', marginBottom: '12px' }}>🗓️</div>
+                  <div style={{ marginBottom: '14px', color: '#6366f1' }}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                      <line x1="16" y1="2" x2="16" y2="6" />
+                      <line x1="8" y1="2" x2="8" y2="6" />
+                      <line x1="3" y1="10" x2="21" y2="10" />
+                    </svg>
+                  </div>
                   <div style={{ fontWeight: 700, fontSize: '17px', color: '#0f172a', marginBottom: '8px' }}>
                     Schedule Live Demo
                   </div>
@@ -240,13 +248,19 @@ export const WaitlistForm: React.FC = () => {
                   onClick={handleSubmit}
                   style={{
                     border: '1.5px solid #e2e8f0',
-                    borderRadius: '14px',
+                    borderRadius: '12px',
                     padding: '24px',
                     cursor: 'pointer',
                     background: '#f8fafc',
+                    transition: 'all 0.15s ease',
                   }}
                 >
-                  <div style={{ fontSize: '24px', marginBottom: '12px' }}>✉️</div>
+                  <div style={{ marginBottom: '14px', color: '#64748b' }}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                      <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                  </div>
                   <div style={{ fontWeight: 700, fontSize: '17px', color: '#0f172a', marginBottom: '8px' }}>
                     Standard Early Access
                   </div>

@@ -1,0 +1,283 @@
+/* ═════════════════════════════════════════════════════════════════════
+   ARCSTONE DESIGN SYSTEM TOKENS & UTILITIES
+   Reference: DESIGN_SYSTEM.md
+   ═════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Canvas & Surface Colors ─────────────────────────────────────── */
+  --as-color-dark-canvas:        #05080f;
+  --as-color-dark-surface-1:     #08071a;
+  --as-color-dark-surface-2:     #0a0e1c;
+  --as-color-dark-surface-3:     #0e0d24;
+  --as-color-dark-surface-4:     #161320;
+
+  --as-color-light-canvas:       #ffffff;
+  --as-color-light-surface-1:    #f8fafc;
+  --as-color-light-surface-2:    #f1f5f9;
+  --as-color-light-surface-3:    #e2e8f0;
+
+  /* ── Structural Borders ──────────────────────────────────────────── */
+  --as-color-dark-border-subtle: #1e1a2e;
+  --as-color-dark-border-card:   rgba(255, 255, 255, 0.08);
+  --as-color-dark-border-hover:  rgba(255, 255, 255, 0.16);
+  --as-color-dark-border-accent: rgba(129, 140, 248, 0.35);
+
+  --as-color-light-border:       #e2e8f0;
+  --as-color-light-border-subtle:#f1f5f9;
+  --as-color-light-border-hover: #cbd5e1;
+
+  /* ── Typography Colors ───────────────────────────────────────────── */
+  --as-color-dark-text-primary:  #ffffff;
+  --as-color-dark-text-secondary:#94a3b8;
+  --as-color-dark-text-muted:    #64748b;
+  --as-color-dark-text-faint:    #475569;
+
+  --as-color-light-text-primary: #0f172a;
+  --as-color-light-text-secondary:#475569;
+  --as-color-light-text-muted:   #64748b;
+  --as-color-light-text-faint:   #94a3b8;
+
+  /* ── Accent Family (Cool Lavender / Violet-Blue) ─────────────────── */
+  --as-accent-lavender:          #b1a1ed;
+  --as-accent-lavender-subtle:   #c7d2fe;
+  --as-accent-violet:            #818cf8;
+  --as-accent-indigo:            #6366f1;
+  --as-accent-glow:              rgba(177, 161, 237, 0.15);
+  --as-accent-surface:           rgba(99, 102, 241, 0.08);
+  --as-accent-border:            rgba(99, 102, 241, 0.25);
+
+  /* ── Semantic State Colors ───────────────────────────────────────── */
+  --as-semantic-success-text:    #4ade80;
+  --as-semantic-success-text-lt: #15803d;
+  --as-semantic-success-bg:      rgba(34, 197, 94, 0.12);
+  --as-semantic-success-border:  rgba(34, 197, 94, 0.28);
+
+  --as-semantic-warning-text:    #fbbf24;
+  --as-semantic-warning-text-lt: #b45309;
+  --as-semantic-warning-bg:      rgba(245, 158, 11, 0.12);
+  --as-semantic-warning-border:  rgba(245, 158, 11, 0.28);
+
+  --as-semantic-danger-text:     #f87171;
+  --as-semantic-danger-text-lt:  #b91c1c;
+  --as-semantic-danger-bg:       rgba(239, 68, 68, 0.10);
+  --as-semantic-danger-border:   rgba(239, 68, 68, 0.25);
+
+  --as-semantic-info-text:       #38bdf8;
+  --as-semantic-info-text-lt:    #0369a1;
+  --as-semantic-info-bg:         rgba(56, 189, 248, 0.10);
+  --as-semantic-info-border:     rgba(56, 189, 248, 0.25);
+
+  /* ── Geometry & Radius Scale ─────────────────────────────────────── */
+  --as-radius-indicator:         4px;
+  --as-radius-control:           8px;
+  --as-radius-input:             10px;
+  --as-radius-card:              12px;
+  --as-radius-module:            14px;
+  --as-radius-hero:              20px;
+  --as-radius-pill:              999px;
+
+  /* ── Elevation & Shadows ─────────────────────────────────────────── */
+  --as-shadow-sm:                0 2px 8px rgba(0, 0, 0, 0.15);
+  --as-shadow-card:              0 4px 20px rgba(0, 0, 0, 0.25);
+  --as-shadow-elevated:          0 8px 30px rgba(0, 0, 0, 0.35);
+  --as-shadow-inset:             inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+  /* ── Motion Timings ──────────────────────────────────────────────── */
+  --as-transition-fast:          150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --as-transition-base:          250ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Standard Arcstone Card Classes ────────────────────────────────── */
+.as-card {
+  background: var(--as-color-dark-surface-2);
+  border: 1px solid var(--as-color-dark-border-card);
+  border-radius: var(--as-radius-card);
+  box-shadow: var(--as-shadow-card);
+  transition: border-color var(--as-transition-base), transform var(--as-transition-base), box-shadow var(--as-transition-base);
+}
+
+.as-card:hover {
+  border-color: var(--as-color-dark-border-hover);
+  box-shadow: var(--as-shadow-elevated);
+}
+
+.as-card-module {
+  background: linear-gradient(145deg, var(--as-color-dark-surface-3), var(--as-color-dark-surface-1));
+  border: 1px solid var(--as-color-dark-border-card);
+  border-radius: var(--as-radius-module);
+  box-shadow: var(--as-shadow-card);
+  transition: border-color var(--as-transition-base), box-shadow var(--as-transition-base);
+}
+
+.as-card-hero {
+  background: linear-gradient(180deg, var(--as-color-dark-surface-1) 0%, var(--as-color-dark-canvas) 100%);
+  border: 1px solid var(--as-color-dark-border-subtle);
+  border-radius: var(--as-radius-hero);
+  box-shadow: var(--as-shadow-elevated);
+}
+
+/* ── Standard Button Classes ───────────────────────────────────────── */
+.as-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--as-accent-indigo);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--as-radius-input);
+  padding: 12px 24px;
+  font-size: 14.5px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--as-transition-fast);
+  white-space: nowrap;
+}
+
+.as-btn-primary:hover {
+  background: #4f46e5;
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+  transform: translateY(-1px);
+}
+
+.as-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--as-color-dark-text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--as-radius-input);
+  padding: 11px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--as-transition-fast);
+  white-space: nowrap;
+}
+
+.as-btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.20);
+}
+
+.as-btn-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--as-accent-surface);
+  border: 1px solid var(--as-accent-border);
+  color: var(--as-accent-lavender-subtle);
+  border-radius: var(--as-radius-pill);
+  padding: 10px 22px;
+  font-size: 13.5px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--as-transition-fast);
+  white-space: nowrap;
+}
+
+.as-btn-pill:hover {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(129, 140, 248, 0.45);
+  color: #ffffff;
+}
+
+/* ── Standard Badge Classes ────────────────────────────────────────── */
+.as-badge-success {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--as-semantic-success-bg);
+  border: 1px solid var(--as-semantic-success-border);
+  color: var(--as-semantic-success-text);
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: var(--as-radius-indicator);
+  padding: 2px 8px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.as-badge-warning {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--as-semantic-warning-bg);
+  border: 1px solid var(--as-semantic-warning-border);
+  color: var(--as-semantic-warning-text);
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: var(--as-radius-indicator);
+  padding: 2px 8px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.as-badge-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--as-semantic-info-bg);
+  border: 1px solid var(--as-semantic-info-border);
+  color: var(--as-semantic-info-text);
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: var(--as-radius-indicator);
+  padding: 2px 8px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ── Standard Input Classes ────────────────────────────────────────── */
+.as-input {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: var(--as-radius-input);
+  border: 1.5px solid var(--as-color-light-border);
+  background: #ffffff;
+  color: var(--as-color-light-text-primary);
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color var(--as-transition-fast), box-shadow var(--as-transition-fast);
+}
+
+.as-input:focus {
+  outline: none;
+  border-color: var(--as-accent-violet);
+  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15);
+}
+
+/* ── Monospace Technical Typography ────────────────────────────────── */
+.as-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-feature-settings: "tnum" 1, "zero" 1;
+}
+
+/* ── Booking Calendar & Form Component Harmonization ───────────────── */
+.bk-day-selected {
+  background: var(--as-accent-indigo) !important;
+  border-color: var(--as-accent-indigo) !important;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35) !important;
+}
+
+.bk-slot-selected {
+  background: var(--as-accent-indigo) !important;
+  border-color: var(--as-accent-indigo) !important;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35) !important;
+}
+
+.bk-slot:hover:not(:disabled) {
+  border-color: var(--as-accent-violet) !important;
+  background: rgba(99, 102, 241, 0.08) !important;
+}
+
+.bk-day-open:hover {
+  border-color: var(--as-accent-violet) !important;
+  background: rgba(99, 102, 241, 0.08) !important;
+}

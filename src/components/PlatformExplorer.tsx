@@ -45,7 +45,7 @@ export const PlatformExplorer: React.FC = () => {
       color: '#ffffff',
       margin: '0 auto',
       maxWidth: '1200px',
-      boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.7)',
+      boxShadow: '0 12px 36px rgba(0, 0, 0, 0.35)',
     }}>
       {/* Explorer Top Header */}
       <div style={{ textAlign: 'center', marginBottom: '36px' }}>
@@ -339,7 +339,7 @@ export const PlatformExplorer: React.FC = () => {
 
               <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.7)', lineHeight: 1.6 }}>
                 {workflowStep === 1 && 'Terms and valuation confirmed with investor counsel. Allocation reserved in round room with electronic term sheet counter-signature.'}
-                {workflowStep === 2 && 'Institutional entity documents and beneficial ownership verified under EU MiFID & AML rules. Compliance certificate stamped.'}
+                {workflowStep === 2 && 'Institutional entity documents and beneficial ownership verified under regulatory compliance standards. Verification certificate stamped.'}
                 {workflowStep === 3 && 'Shareholder agreement, subscription deed, and power of attorney executed securely with qualified electronic signature.'}
                 {workflowStep === 4 && 'Funds received in escrow. Arcstone automatically issues 816,326 Series A Preferred shares and updates the live company register.'}
               </div>

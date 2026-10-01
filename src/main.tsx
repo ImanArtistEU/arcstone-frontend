@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { App } from './App';
 import './styles/app.css';
+import './styles/arcstone-tokens.css';
 
 // Global navigation handler for links inside static HTML templates
 (window as unknown as { navigateTo: (event: Event | null, path: string) => void }).navigateTo = (
