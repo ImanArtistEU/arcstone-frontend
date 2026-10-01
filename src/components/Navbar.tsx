@@ -2,11 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 
-const darkHeroRoutes = new Set([
+export const DARK_HERO_ROUTES = new Set([
   '/contact',
   '/waitlist',
   '/privacy-policy',
   '/terms-and-conditions',
+  '/cookie-policy',
+  '/legal-and-regulatory',
 ]);
 
 export const Navbar: React.FC = () => {
@@ -19,10 +21,18 @@ export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [solutionsOpen, setSolutionsOpen] = useState(false);
   const [currentPath, setCurrentPath] = useState(location.pathname);
+  const [isOnDarkHero, setIsOnDarkHero] = useState(() => DARK_HERO_ROUTES.has(location.pathname));
 
   const lastScrollY = useRef(0);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const isOnDarkHero = darkHeroRoutes.has(location.pathname);
+
+  useEffect(() => {
+    const isDarkByRoute = DARK_HERO_ROUTES.has(location.pathname);
+    const hasDarkHeroEl = Boolean(
+      document.querySelector('.legal-page-hero, [data-hero="dark"]')
+    );
+    setIsOnDarkHero(isDarkByRoute || hasDarkHeroEl);
+  }, [location.pathname]);
 
   // Close menus on route change
   if (location.pathname !== currentPath) {

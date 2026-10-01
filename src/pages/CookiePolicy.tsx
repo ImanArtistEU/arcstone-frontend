@@ -1,35 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useConsent } from '../context/ConsentContext';
+import { LegalHero } from '../components/LegalHero';
 
 export const CookiePolicy: React.FC = () => {
   const { openPreferences } = useConsent();
 
   return (
     <div id="page-cookie-policy" className="wf">
-      <div className="legal-page-hero">
-        <div className="legal-hero-video">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            poster="/wf/6491ab1c780fa954eb9a3f02_Gradient-poster-00001.jpg"
-          >
-            <source src="/wf/6491ab1c780fa954eb9a3f02_Gradient-transcode.mp4" type="video/mp4" />
-            <source src="/wf/6491ab1c780fa954eb9a3f02_Gradient-transcode.webm" type="video/webm" />
-          </video>
-        </div>
-        <div className="legal-hero-scrim" />
-        <div className="legal-hero-inner">
-          <div className="legal-eyebrow">Legal</div>
-          <h1>Cookie Policy</h1>
-          <div className="legal-meta">
-            <span>Last updated: 29 June 2026</span>
-          </div>
-        </div>
-      </div>
+      <LegalHero eyebrow="Legal" title="Cookie Policy" metaText="Last updated: 29 June 2026" />
 
       <div className="legal-body">
         <div className="legal-highlight-box">

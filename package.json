@@ -8,7 +8,10 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "test": "playwright test"
+    "test": "playwright test tests/functional-responsive.spec.ts",
+    "test:visual": "playwright test tests/screenshots.spec.ts",
+    "test:visual:update": "playwright test tests/screenshots.spec.ts --update-snapshots",
+    "test:all": "playwright test"
   },
   "dependencies": {
     "react": "^18.3.1",
