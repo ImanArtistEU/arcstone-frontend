@@ -1,5 +1,8 @@
 import React, { useEffect } from 'react';
 import htmlContent from './templates/HomeContent.html?raw';
+import { PlatformExplorer } from '../components/PlatformExplorer';
+
+const [topHtml, bottomHtml] = htmlContent.split('<!-- PLATFORM_EXPLORER_MOUNT -->');
 
 export const Home: React.FC = () => {
   useEffect(() => {
@@ -78,5 +81,15 @@ export const Home: React.FC = () => {
     };
   }, []);
 
-  return <div id="page-home" dangerouslySetInnerHTML={{ __html: htmlContent }} />;
+  return (
+    <div id="page-home" className="wf">
+      <div dangerouslySetInnerHTML={{ __html: topHtml || '' }} />
+      <section className="section" style={{ paddingTop: '32px', paddingBottom: '64px' }}>
+        <div className="container w-container">
+          <PlatformExplorer />
+        </div>
+      </section>
+      <div dangerouslySetInnerHTML={{ __html: bottomHtml || '' }} />
+    </div>
+  );
 };
